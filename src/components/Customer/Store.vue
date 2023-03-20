@@ -3,40 +3,42 @@
     <div class="alert alert-info" role="alert">
       Registro de clientes! {{ id }}
     </div>
-    <input
-      class="form-control form-control-sm mt-3"
-      v-model="name"
-      type="text"
-      placeholder="Nombre cliente"
-      required
-    />
-    <input
-      class="form-control form-control-sm mt-3"
-      v-model="phone"
-      type="text"
-      placeholder="tel"
-      required
-    />
-    <button
-      v-if="id == null"
-      type="button"
-      @click="send()"
-      class="btn btn-primary btn-sm mt-3"
+    <form
+      method="POST"
+      @submit.enter.prevent="send()"
+      autocomplete="off"
+      onKeyPress="if(event.keyCode == 13) event.returnValue = false;"
     >
-      Guardar
-    </button>
-    <button
-      v-else
-      type="button"
-      @click="send()"
-      class="btn btn-success btn-sm mt-3"
-    >
-      Editar
-    </button>
+      <input
+        class="form-control form-control-sm mt-3"
+        v-model="name"
+        ref="name"
+        type="text"
+        placeholder="Nombre cliente"
+        required
+      />
+      <input
+        class="form-control form-control-sm mt-3"
+        v-model="phone"
+        type="number"
+        placeholder="phone customers"
+        required
+      />
+      <button
+        v-if="id == null"
+        type="submit"
+        class="btn btn-primary btn-sm mt-3"
+      >
+        Guardar
+      </button>
+      <button v-else type="submit" class="btn btn-success btn-sm mt-3">
+        Editar
+      </button>
+    </form>
   </div>
 </template>
 <script>
-import gql from "graphql-tag";
+import { saveCustomer, UpdateCustomer } from "@/graphql/customerMutation";
 export default {
   name: "Store",
   data() {
@@ -46,7 +48,9 @@ export default {
       phone: "",
     };
   },
-
+  mounted() {
+    this.$refs.name.focus();
+  },
   methods: {
     send() {
       if (this.id == null) {
@@ -56,22 +60,20 @@ export default {
       }
     },
     createContact(name, phone) {
-      this.$apollo.mutate({
-        mutation: gql`
-          mutation addCustomer($name: String!, $phone: String!) {
-            addCustomer(id: "", name: $name, phone: $phone) {
-              id
-              name
-              phone
-            }
-          }
-        `,
-        variables: {
-          name: name,
-          phone: phone,
-        },
-      });
-      location.reload();
+      try {
+        this.$apollo.mutate({
+          mutation: saveCustomer,
+          variables: {
+            name: name,
+            phone: phone,
+          },
+        });
+        this.$store.dispatch("Customeractions");
+        this.$swal.fire("Good job!", "Cliente registrado", "success");
+        this.clear();
+      } catch (error) {
+        console.log(error);
+      }
     },
     show(row) {
       this.id = row.id;
@@ -79,24 +81,26 @@ export default {
       this.phone = row.phone;
     },
     update(id, name, phone) {
-      console.log(`Update contact: # ${id}`);
-      this.$apollo.mutate({
-        mutation: gql`
-          mutation updateCustomer($id: ID!, $name: String!, $phone: String!) {
-            updateCustomer(id: $id, customer: { name: $name, phone: $phone }) {
-              id
-              name
-              phone
-            }
-          }
-        `,
-        variables: {
-          id: id,
-          name: name,
-          phone: phone,
-        },
-      });
-      location.reload();
+      try {
+        this.$apollo.mutate({
+          mutation: UpdateCustomer,
+          variables: {
+            id: id,
+            name: name,
+            phone: phone,
+          },
+        });
+        this.$store.dispatch("Customeractions");
+        this.$swal.fire("Good job!", "Cliente modificado", "success");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    clear() {
+      this.$refs.name.focus();
+      this.name = "";
+      this.phone = "";
+      this.id = null;
     },
   },
 };

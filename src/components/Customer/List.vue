@@ -35,7 +35,7 @@
               <button
                 type="button"
                 @click="$emit('show', row)"
-                class="btn btn-danger btn-sm"
+                class="btn btn-warning btn-sm"
               >
                 U
               </button>
@@ -52,7 +52,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import gql from "graphql-tag";
+import { DeleteCustomer } from "@/graphql/customerMutation";
 
 export default {
   name: "ListCustomer",
@@ -60,6 +60,7 @@ export default {
     return {
       totalPages: 1,
       currentPage: 1,
+
       filters: {
         name: { value: "", keys: ["name", "phone"] },
       },
@@ -77,20 +78,18 @@ export default {
       this.$store.dispatch("Customeractions");
     },
     destroy(id) {
-      console.log(`Delete contact: # ${id}`);
-      this.$apollo.mutate({
-        mutation: gql`
-          mutation deleteCustomer($id: ID!) {
-            deleteCustomer(id: $id) {
-              id
-            }
-          }
-        `,
-        variables: {
-          id: id,
-        },
-      });
-      location.reload();
+      try {
+        this.$apollo.mutate({
+          mutation: DeleteCustomer,
+          variables: {
+            id: id,
+          },
+        });
+        this.listCustomer();
+        this.$swal.fire("Good job!", "Cliente eliminado", "success");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
