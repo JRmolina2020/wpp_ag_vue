@@ -36,5 +36,17 @@ export default new Vuex.Store({
         commit("Customermutations", result.data.data.customers);
       });
     },
+
+    async Productactions({ commit, state }) {
+      axios({
+        url: state.url,
+        method: "post",
+        data: {
+          query: queryProduct,
+        },
+      }).then((result) => {
+        commit("Productmutations", result.data.data.products);
+      });
+    },
   },
 });
