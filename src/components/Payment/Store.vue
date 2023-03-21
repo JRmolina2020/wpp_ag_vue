@@ -1,8 +1,6 @@
 <template>
   <div class="container col-lg-4 mt-5">
-    <div class="alert alert-info" role="alert">
-      Registro de clientes! {{ id }}
-    </div>
+    <div class="alert alert-info" role="alert">Registro de pagos! {{ id }}</div>
     <form
       method="POST"
       @submit.enter.prevent="send()"
@@ -14,16 +12,15 @@
         v-model="name"
         ref="name"
         type="text"
-        placeholder="Nombre cliente"
+        placeholder="Nombre del pago"
         required
       />
-      <input
-        class="form-control form-control-sm mt-3"
-        v-model="phone"
-        type="number"
-        placeholder="phone customers"
-        required
-      />
+      <div class="form-group mt-3">
+        <select id="my-select" class="form-control" v-model="status">
+          <option :value="true">Activo</option>
+          <option :value="false">Inactivo</option>
+        </select>
+      </div>
       <button
         v-if="id == null"
         type="submit"
@@ -38,14 +35,14 @@
   </div>
 </template>
 <script>
-import { saveCustomer, UpdateCustomer } from "@/graphql/customerMutation";
+import { savePayment, UpdatePayment } from "@/graphql/paymentMutation";
 export default {
   name: "Store",
   data() {
     return {
       id: null,
       name: "",
-      phone: "",
+      status: 1,
     };
   },
   mounted() {
@@ -54,22 +51,22 @@ export default {
   methods: {
     send() {
       if (this.id == null) {
-        this.createContact(this.name, this.phone);
+        this.createPayment(this.name, this.status);
       } else {
-        this.update(this.id, this.name, this.phone);
+        this.update(this.id, this.name, this.status);
       }
     },
-    createContact(name, phone) {
+    createPayment(name, status) {
       try {
         this.$apollo.mutate({
-          mutation: saveCustomer,
+          mutation: savePayment,
           variables: {
             name: name,
-            phone: phone,
+            status: status,
           },
         });
-        this.$store.dispatch("Customeractions");
-        this.$swal.fire("Good job!", "Cliente registrado", "success");
+        this.$store.dispatch("Paymentactions");
+        this.$swal.fire("Good job!", "Pago registrado", "success");
         this.clear();
       } catch (error) {
         console.log(error);
@@ -78,20 +75,20 @@ export default {
     show(row) {
       this.id = row.id;
       this.name = row.name;
-      this.phone = row.phone;
+      this.status = row.status;
     },
-    update(id, name, phone) {
+    update(id, name, status) {
       try {
         this.$apollo.mutate({
-          mutation: UpdateCustomer,
+          mutation: UpdatePayment,
           variables: {
             id: id,
             name: name,
-            phone: phone,
+            status: status,
           },
         });
-        this.$store.dispatch("Customeractions");
-        this.$swal.fire("Good job!", "Cliente modificado", "success");
+        this.$store.dispatch("Paymentactions");
+        this.$swal.fire("Good job!", "Pago modificado", "success");
         this.clear();
       } catch (error) {
         console.log(error);
@@ -100,7 +97,7 @@ export default {
     clear() {
       this.$refs.name.focus();
       this.name = "";
-      this.phone = "";
+      this.status = true;
       this.id = null;
     },
   },

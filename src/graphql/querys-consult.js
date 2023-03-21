@@ -7,4 +7,13 @@ query AllCustomerQuery {
   }
 }
 `;
-export { queryCustomer };
+const queryPayment = `
+query AllCategoryQuery {
+  payments {
+    id
+    name
+    status
+  }
+  }
+`;
+export { queryCustomer, queryPayment };
