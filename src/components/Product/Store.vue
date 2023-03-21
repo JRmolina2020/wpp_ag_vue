@@ -72,7 +72,7 @@ export default {
           })
 
         this.$store.dispatch("Productactions");
-        this.$swal.fire("Good job!", "Cliente registrado", "success");
+        this.$swal.fire("Excelente!", "Producto registrado", "success");
         this.clear();
       } catch (error) {
         console.log(error);
