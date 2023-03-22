@@ -32,7 +32,7 @@ const UpdateProduct = gql`
   }
 `;
 const DeleteProduct = gql`
-  mutation deleteProduct($id: ID!) {
+  mutation deleteProduct($id: String!) {
     deleteProduct(id: $id) {
       id
     }

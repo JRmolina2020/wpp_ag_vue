@@ -53,6 +53,7 @@
 <script>
 import { mapState } from "vuex";
 import { DeleteCustomer } from "@/graphql/customerMutation";
+import { DeleteProduct } from "@/graphql/productMutation";
 
 export default {
   name: "ListProduct",
@@ -74,12 +75,15 @@ export default {
   },
   methods: {
     listProduct() {
-      this.$store.dispatch("Productactions");
+      let getWithSecond = setTimeout(() => {
+        this.$store.dispatch("Productactions");
+      }, 1000);
+      clearTimeout(getWithSecond);
     },
     destroy(id) {
       try {
         this.$apollo.mutate({
-          mutation: DeleteCustomer,
+          mutation: DeleteProduct,
           variables: {
             id: id,
           },
