@@ -22,6 +22,7 @@
             <td>{{ row.id }}</td>
             <td>{{ row.name }}</td>
             <td>{{ row.price }}</td>
+            
             <th>
               <button
                 type="button"
@@ -52,7 +53,6 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { DeleteCustomer } from "@/graphql/customerMutation";
 import { DeleteProduct } from "@/graphql/productMutation";
 
 export default {
@@ -75,10 +75,9 @@ export default {
   },
   methods: {
     listProduct() {
-      let getWithSecond = setTimeout(() => {
+     setTimeout(() => {
         this.$store.dispatch("Productactions");
       }, 1000);
-      clearTimeout(getWithSecond);
     },
     destroy(id) {
       try {

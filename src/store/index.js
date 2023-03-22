@@ -14,6 +14,7 @@ export default new Vuex.Store({
     orders: [],
     orders_details: [],
     url: uri,
+    editing: false,
   },
   mutations: {
     Customermutations(state, response) {
@@ -27,7 +28,11 @@ export default new Vuex.Store({
     },
     Productmutations(state, response) {
       state.products = response;
+    },
+    handleEditMutation(state, response) {
+      state.editing = response;
     }
+
   },
   actions: {
     async Customeractions({ commit, state }) {
@@ -74,6 +79,11 @@ export default new Vuex.Store({
       }).then((result) => {
         commit("Productmutations", result.data.data?.products);
       });
+    },
+
+    async handleEditAction({ commit, state }) {
+      state.editing = !state.editing;
+      commit("handleEditMutation", state.editing);
     },
   },
 });

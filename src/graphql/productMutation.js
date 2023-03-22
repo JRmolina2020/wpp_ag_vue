@@ -23,8 +23,8 @@ const saveProduct = gql`
   }
 `;
 const UpdateProduct = gql`
-  mutation updateProduct($id: ID!, $name: String!, $price: String!) {
-    updateProduct(id: $id, Product: { name: $name, price: $price }) {
+  mutation updateProduct($id: String!, $name: String!, $price: String!) {
+    updateProduct(id: $id, product: { name: $name, price: $price }) {
       id
       name
       price
