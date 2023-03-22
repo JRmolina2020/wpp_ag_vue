@@ -14,21 +14,19 @@
         <input class="form-control" v-model="filters.name.value" />
         <thead slot="head">
           <th>Nombre</th>
-          <th>Tel</th>
-          <th>OD</th>
-          <th>OU</th>
+          <th>Precio</th>
         </thead>
         <tbody slot="body" slot-scope="{ displayData }">
           <tr v-for="row in displayData" :key="row.id">
             <td>{{ row.name }}</td>
-            <td>{{ row.phone }}</td>
+            <td>{{ row.price }}</td>
             <th>
               <button
                 type="button"
                 @click="destroy(row.id)"
                 class="btn btn-danger btn-sm"
               >
-                E
+                Delete
               </button>
             </th>
             <th>
@@ -37,7 +35,7 @@
                 @click="$emit('show', row)"
                 class="btn btn-warning btn-sm"
               >
-                U
+                Update
               </button>
             </th>
           </tr>
@@ -55,27 +53,27 @@ import { mapState } from "vuex";
 import { DeleteCustomer } from "@/graphql/customerMutation";
 
 export default {
-  name: "ListCustomer",
+  name: "ListProduct",
   data() {
     return {
       totalPages: 1,
       currentPage: 1,
-
       filters: {
-        name: { value: "", keys: ["name", "phone"] },
+        name: { value: "", keys: ["name", "price"] },
       },
     };
   },
   computed: {
-    ...mapState(["customers"]),
+    ...mapState(["products"]),
   },
 
   created() {
-    this.listCustomer();
+    console.log("created", this.products);
+    this.listProduct();
   },
   methods: {
-    listCustomer() {
-      this.$store.dispatch("Customeractions");
+    listProduct() {
+      this.$store.dispatch("Productactions");
     },
     destroy(id) {
       try {
@@ -85,7 +83,7 @@ export default {
             id: id,
           },
         });
-        this.listCustomer();
+        this.listProduct();
         this.$swal.fire("Good job!", "Cliente eliminado", "success");
       } catch (error) {
         console.log(error);

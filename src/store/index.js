@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import { queryCustomer, queryPayment } from "@/graphql/querys-consult";
+import { queryCustomer, queryPayment, queryProduct } from "@/graphql/querys-consult";
 import { uri } from "@/graphql/config";
 Vue.use(Vuex);
 
@@ -22,6 +22,9 @@ export default new Vuex.Store({
     Paymentmutations(state, response) {
       state.payments = response;
     },
+    Productmutations(state, response) {
+      state.products = response;
+    }
   },
   actions: {
     async Customeractions({ commit, state }) {
@@ -44,6 +47,19 @@ export default new Vuex.Store({
         },
       }).then((result) => {
         commit("Paymentmutations", result.data.data.payments);
+      });
+    },
+
+    async Productactions({ commit, state }) {
+      axios({
+        url: state.url,
+        method: "post",
+        data: {
+          query: queryProduct,
+        },
+      }).then((result) => {
+        console.log("storeProduct",result)
+        commit("Productmutations", result.data.data?.products);
       });
     },
   },

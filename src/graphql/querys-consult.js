@@ -16,4 +16,19 @@ query AllCategoryQuery {
   }
   }
 `;
-export { queryCustomer, queryPayment };
+
+
+const queryProduct = `
+query AllProductQuery {
+  products {
+    id
+    name
+    price
+    category_id
+    status
+  }
+}
+`;
+
+
+export { queryCustomer, queryPayment, queryProduct };
