@@ -48,22 +48,13 @@
         required
       />
 
-      <button
-        v-if="isEditing"
-        type="submit"
-        class="btn btn-success btn-sm mt-3"
-      >
-        Editar
-      </button>
-
-      <button v-else type="submit" class="btn btn-primary btn-sm mt-3">
-        Guardar
-      </button>
+      <button type="submit" class="btn btn-primary btn-sm mt-3">Guardar</button>
     </form>
   </div>
 </template>
 <script>
-import { saveProduct, UpdateProduct } from "@/graphql/productMutation";
+import { saveProduct } from "@/graphql/productMutation";
+import { queryProduct } from "@/graphql/querys-consult";
 export default {
   name: "Store",
   data() {
@@ -75,9 +66,7 @@ export default {
       category_id: "",
     };
   },
-  mounted() {
-    this.$refs.id.focus();
-  },
+
   methods: {
     send() {
       this.createProduct(
@@ -88,8 +77,14 @@ export default {
         this.category_id
       );
     },
+    listProduct() {
+
+      console.log(".::GET PRODUCTS::.")
+      setTimeout(() => {
+        this.$store.dispatch("Productactions");
+      }, 1000);
+    },
     createProduct(id, name, price, status, category_id) {
-      
       try {
         this.$apollo.mutate({
           mutation: saveProduct,
@@ -101,13 +96,13 @@ export default {
             category_id: category_id,
           },
         });
-
-        this.$store.dispatch("Productactions");
         this.$swal.fire("Excelente!", "Producto registrado", "success");
         this.clear();
       } catch (error) {
         console.log(error);
       }
+
+      this.listProduct();
     },
     show(row) {
       this.id = row.id;
@@ -131,7 +126,6 @@ export default {
       }
     },
     clear() {
-      this.$refs.id.focus();
       this.name = "";
       this.price = "";
       this.id = null;

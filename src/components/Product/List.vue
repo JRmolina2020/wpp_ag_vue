@@ -13,11 +13,13 @@
       >
         <input class="form-control" v-model="filters.name.value" />
         <thead slot="head">
+          <th>ID</th>
           <th>Nombre</th>
           <th>Precio</th>
         </thead>
         <tbody slot="body" slot-scope="{ displayData }">
           <tr v-for="row in displayData" :key="row.id">
+            <td>{{ row.id }}</td>
             <td>{{ row.name }}</td>
             <td>{{ row.price }}</td>
             <th>
@@ -68,7 +70,6 @@ export default {
   },
 
   created() {
-    console.log("created", this.products);
     this.listProduct();
   },
   methods: {
@@ -84,7 +85,7 @@ export default {
           },
         });
         this.listProduct();
-        this.$swal.fire("Good job!", "Cliente eliminado", "success");
+        this.$swal.fire("Good job!", "Producto eliminado", "success");
       } catch (error) {
         console.log(error);
       }

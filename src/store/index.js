@@ -58,7 +58,6 @@ export default new Vuex.Store({
           query: queryProduct,
         },
       }).then((result) => {
-        console.log("storeProduct",result)
         commit("Productmutations", result.data.data?.products);
       });
     },
