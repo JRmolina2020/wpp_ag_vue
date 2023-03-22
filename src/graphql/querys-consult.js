@@ -8,7 +8,7 @@ query AllCustomerQuery {
 }
 `;
 const queryPayment = `
-query AllCategoryQuery {
+query AllPaymentQuery {
   payments {
     id
     name
@@ -16,6 +16,16 @@ query AllCategoryQuery {
   }
   }
 `;
+const queryCategory = `
+query AllCategoryQuery {
+  categories {
+    id
+    name
+    status
+  }
+  }
+`;
+
 
 
 const queryProduct = `
@@ -31,4 +41,4 @@ query AllProductQuery {
 `;
 
 
-export { queryCustomer, queryPayment, queryProduct };
+export { queryCustomer, queryPayment, queryCategory, queryProduct };

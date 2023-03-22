@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import { queryCustomer, queryPayment, queryProduct } from "@/graphql/querys-consult";
+import { queryCustomer, queryPayment,  queryCategory, queryProduct } from "@/graphql/querys-consult";
 import { uri } from "@/graphql/config";
 Vue.use(Vuex);
 
@@ -21,6 +21,9 @@ export default new Vuex.Store({
     },
     Paymentmutations(state, response) {
       state.payments = response;
+    },
+    Categorymutations(state, response) {
+      state.categories = response;
     },
     Productmutations(state, response) {
       state.products = response;
@@ -47,6 +50,17 @@ export default new Vuex.Store({
         },
       }).then((result) => {
         commit("Paymentmutations", result.data.data.payments);
+      });
+    },
+    async Categoryactions({ commit, state }) {
+      axios({
+        url: state.url,
+        method: "post",
+        data: {
+          query: queryCategory,
+        },
+      }).then((result) => {
+        commit("Categorymutations", result.data.data.categories);
       });
     },
 
