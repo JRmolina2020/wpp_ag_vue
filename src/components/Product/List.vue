@@ -16,13 +16,14 @@
           <th>ID</th>
           <th>Nombre</th>
           <th>Precio</th>
+          <th>Category</th>
         </thead>
         <tbody slot="body" slot-scope="{ displayData }">
           <tr v-for="row in displayData" :key="row.id">
             <td>{{ row.id }}</td>
             <td>{{ row.name }}</td>
             <td>{{ row.price }}</td>
-            
+            <td>{{ row.category_id }}</td>
             <th>
               <button
                 type="button"

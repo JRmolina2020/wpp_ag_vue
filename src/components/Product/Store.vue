@@ -11,9 +11,11 @@
       <input class="form-control form-control-sm mt-3" v-model="price" type="text" placeholder="precio" required />
 
       <input class="form-control form-control-sm mt-3" v-model="status" type="text" placeholder="status" required />
-
-      <input class="form-control form-control-sm mt-3" v-model="category_id" type="text" placeholder="category_id"
-        required />
+      
+      <select class="form-control form-control-sm mt-3" v-model="category_id" @click="getCategories()">
+        <option v-for="(item, index) in categories" :key="index" :value="item.name">{{item.name}}</option>
+      </select>
+    
 
       <button type="submit" class="btn btn-primary btn-sm mt-3">Guardar</button>
     </form>
@@ -21,6 +23,8 @@
 </template>
 <script>
 import { saveProduct,UpdateProduct } from "@/graphql/productMutation";
+import { mapState } from "vuex";
+
 export default {
   name: "Store",
   data() {
@@ -41,8 +45,8 @@ export default {
           this.id,
           this.name,
           this.price,
+          this.status,
           this.category_id,
-          this.status
         );
         this.$store.dispatch("handleEditAction");
         return;
@@ -78,7 +82,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-
       this.listProduct();
     },
     show(row) {
@@ -91,6 +94,7 @@ export default {
     },
     update(id, name, price, status, category_id) {
       try {
+        console.log(category_id)
         this.$apollo.mutate({
           mutation: UpdateProduct,
           variables: {
@@ -116,6 +120,12 @@ export default {
       this.category_id = "";
       this.status = "";
     },
+    getCategories(){
+      this.$store.dispatch("Categoryactions");
+    }
+  },
+  computed: {
+    ...mapState(["categories"]),
   },
 };
 </script>
