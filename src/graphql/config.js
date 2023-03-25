@@ -1,2 +1,2 @@
-const uri = "http://localhost:5000/graphql";
+const uri = "http://localhost:80/graphql";
 export { uri };
